@@ -2,8 +2,7 @@ import streamlit as st
 import openai
 import os
 
-CHATGPT_API_KEY = st.secrets["GPT_API"],
-openai.api_key = CHATGPT_API_KEY
+openai.api_key = st.secrets["GPT_API"] 
 
 
 
