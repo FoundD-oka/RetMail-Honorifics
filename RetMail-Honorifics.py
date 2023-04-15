@@ -74,8 +74,7 @@ def generate_reply(email_text, elements):
     return res["choices"][0]["message"]["content"]
 
 st.title("【ビジネスメール 返信】")
-st.write('<div id="header1" style="font-size:24px; font-weight:bold;">お客様へのメール文章 /</div>', unsafe_allow_html=True)
-st.write('<div id="header2" style="font-size:24px; font-weight:bold;">返信に含める要素を入力してください。</div>', unsafe_allow_html=True)
+st.write('<div id="header1" style="font-size:18px; font-weight:bold;">お客様へのメール文章 / 返信に含める要素を入力してください。</div>', unsafe_allow_html=True)
 st.write('<div id="header3" style="font-size:24px; font-weight:bold;">&nbsp;</div>', unsafe_allow_html=True)
 
 email_text = st.text_area("お客様からのメール文章", "")
