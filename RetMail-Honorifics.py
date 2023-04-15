@@ -2,7 +2,8 @@ import streamlit as st
 import openai
 import os
 
-openai.api_key = st.secrets["GPT_API"] 
+CHATGPT_API_KEY = st.secrets["GPT_API"],
+openai.api_key = CHATGPT_API_KEY
 
 
 
@@ -49,11 +50,24 @@ def generate_reply(email_text, elements):
         messages=[
             {
                 "role": "system",
-                "content": "Forget all previous conversations and start from scratch. You are a helpful AI assistant capable of understanding and responding to Japanese emails. Use the format 'お世話になっております。<br>〇〇株式会社の〇〇です。' at the beginning. Also, think of an appropriate email subject. The subject should be written before the opening, at the very beginning. Include words of appreciation for the recipient."
+                "content": "Forget all previous conversations and start with a blank slate. You are an AI assistant who can understand Japanese emails and reply using 【Writing Techniques】. \
+                    Use the format 「お世話になっております。\n\n〇〇株式会社の〇〇です。」 at the beginning of the 【reply content】 you create. Also, think of an appropriate email 件名. The 件名 should be written before the beginning. Include words of gratitude to the recipient.\
+                        The contents of {elements} are the contents to be incorporated into the reply. Be careful not to write replies to {elements}.\
+                【Writing Techniques】\
+                [Polite language]: In written communication, polite language is important. Use honorifics and polite expressions to show consideration for the user.\
+                [Clear and concise sentences]: Make your sentences clear and concise so that users can easily understand them. Avoid long sentences and jargon, and convey information using short and simple words.\
+                [Open-ended questions]: To elicit information from users, ask open-ended questions. By asking questions that cannot be answered with Yes/No, you can obtain more information.\
+                [Use affirmative words]: Use affirmative words to give users a sense of security. Choose words that accept the other person's feelings and situation and create a positive atmosphere.\
+                [Soft expressions]: Use soft expressions to avoid giving users discomfort. Be mindful of polite expressions and seek information indirectly.\
+                [Confirmation questions]: In communication with users, asking confirmation questions ensures that you can respond without misunderstandings. Ask appropriate questions to confirm that the information has been accurately conveyed.\
+                [Appropriate compliments]: When users understand something or solve a problem, using appropriate compliments can create a positive atmosphere."
             },
             {
                 "role": "user",
-                "content": f"#{email_text}のメールが届きました。これに対して{elements}の内容で、装飾を加えて返信してください。"
+                "content": f"{email_text}の内容でメールが届きました。これに対して返信する文章【reply content】を作成してください。\
+                #作成した【reply content】を分解し、分解した内容に{elements}の内容を追加してください。内容に相違があったところは{elements}の内容を上書きしてください。言葉が質問なのか、情報の伝達なのか、確認なのか意味をよく考えから上書きしてください。\
+                #最終的に各項目ををお客様にわかりやすい順序で再構築して、【Writing Techniques】を使って箇条書きではない、一つのまとまった文章として書き出してください。\
+                #文章が論理性で一貫性があるか考えておかしい点は{elements}を元に修正してください。."
             },
         ],
     )
@@ -73,16 +87,16 @@ elements = [
 ]
 
 
-if st.button("返信文章生成"):
+if st.button("文章生成"):
     if not email_text or not any(elements):
         st.warning("すべての入力フォームにテキストを入力してください。")
     else:
         with st.spinner("返信文章を生成中です..."):
             reply = generate_reply(email_text, [e for e in elements if e])
             subject, _, body = reply.partition('\n')
-            st.markdown(f"### 件名:")
-            st.write(subject)
-            st.markdown(f"### 返信文章:")
+            #st.markdown(f"### 件名:")
+            st.markdown(f"<span style='font-size:18px; font-weight:bold;'>{subject}</span>", unsafe_allow_html=True)
+            #st.markdown(f"### 返信文章:")
             st.write(body)
 
 # グラデーション背景の追加
