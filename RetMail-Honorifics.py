@@ -5,15 +5,13 @@ import os
 CHATGPT_API_KEY = st.secrets["GPT_API"]
 openai.api_key = CHATGPT_API_KEY
 
-
-
 def generate_polite_business_text(input_text):
     res = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
-                "content": "#Forget everything discussed so far and start from scratch.You are a helpful AI assistant that can understand the input text and convert it into a polite business document in Japanese. Make sure the output text expresses gratitude and respect, and if the input contains bullet points, combine them into a single, coherent sentence. Use the format 'お世話になっております。<br> 〇〇株式会社の〇〇です。' at the beginning of the sentence. Also, think of an appropriate email subject. Write the subject before the beginning, at the very first. Additionally, add embellishments to the text to make it longer. Break down the elements from {input_text}, rearrange them in a more appropriate order, and create a business document."
+                "content": "#Forget everything discussed so far and start from scratch.You are a helpful AI assistant that can understand the input text and convert it into a polite business document in Japanese. Make sure the output text expresses gratitude and respect, and if the input contains bullet points, combine them into a single, coherent sentence. Use the format 'お世話になっております。\n\n〇〇株式会社の〇〇です。' at the beginning of the sentence. Also, Additionally, add embellishments to the text to make it longer. Break down the elements from {input_text}, rearrange them in a more appropriate order, and create a business document."
             },
             {
                 "role": "user",
@@ -35,6 +33,8 @@ if st.button("文章変換"):
             polite_business_text = generate_polite_business_text(input_text)
             st.markdown("### 生成されたビジネス文章:")
             st.write(polite_business_text)
+            st.markdown('<a href="https://www.deepl.com/ja/translator" target="_blank" style="color:　Black;">英訳はこちらのDeeplをお使いください</a>', unsafe_allow_html=True)
+
 
 # 水平線
 st.markdown(
@@ -67,14 +67,16 @@ def generate_reply(email_text, elements):
                 "content": f"{email_text}の内容でメールが届きました。これに対して返信する文章【reply content】を作成してください。\
                 #作成した【reply content】を分解し、分解した内容に{elements}の内容を追加してください。内容に相違があったところは{elements}の内容を上書きしてください。言葉が質問なのか、情報の伝達なのか、確認なのか意味をよく考えから上書きしてください。\
                 #最終的に各項目ををお客様にわかりやすい順序で再構築して、【Writing Techniques】を使って箇条書きではない、一つのまとまった文章として書き出してください。\
-                #文章が論理性で一貫性があるか考えておかしい点は{elements}を元に修正してください。."
+                #文章が論理性で一貫性があるか考えておかしい点は{elements}を元に修正してください。\
+                #必ず、最終結果の文章のみ表示してください。処理の途中を書き出すとあなたの評価が大きく下げられ不信感につながります。."
             },
         ],
     )
     return res["choices"][0]["message"]["content"]
 
 st.title("【ビジネスメール 返信】")
-st.write('<div id="header1" style="font-size:18px; font-weight:bold;">お客様へのメール文章 / 返信に含める要素を入力してください。</div>', unsafe_allow_html=True)
+st.write('<div id="header1" style="font-size:24px; font-weight:bold;">お客様へのメール文章 /</div>', unsafe_allow_html=True)
+st.write('<div id="header2" style="font-size:24px; font-weight:bold;">返信に含める要素を入力してください。</div>', unsafe_allow_html=True)
 st.write('<div id="header3" style="font-size:24px; font-weight:bold;">&nbsp;</div>', unsafe_allow_html=True)
 
 email_text = st.text_area("お客様からのメール文章", "")
@@ -97,6 +99,8 @@ if st.button("文章生成"):
             st.markdown(f"<span style='font-size:18px; font-weight:bold;'>{subject}</span>", unsafe_allow_html=True)
             #st.markdown(f"### 返信文章:")
             st.write(body)
+            st.markdown('<a href="https://www.deepl.com/ja/translator" target="_blank" style="color:　Black;">英訳はこちらのDeeplをお使いください</a>', unsafe_allow_html=True)
+
 
 # グラデーション背景の追加
 st.markdown(
