@@ -7,7 +7,7 @@ openai.api_key = CHATGPT_API_KEY
 
 def generate_polite_business_text(input_text):
     res = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         messages=[
             {
                 "role": "system",
